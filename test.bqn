@@ -11,7 +11,7 @@ DDDDx  ← 4 # commen
 
 BBxx ← 2   # comment
 CCCxx ← 3 # comment
-DDDDxx   ←4 # comment
+DDDDDDxx   ←4 + t ← 10 # comment
 
 Function ← {
     A ← 1 # comment
