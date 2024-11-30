@@ -15,5 +15,3 @@ main ← {
     FormatSingleFile¨ fs.ListRecursiveBQNFiles d
     •Out "All files formatted! 🥳"
 }
-
-main
