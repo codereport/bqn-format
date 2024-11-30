@@ -3,15 +3,28 @@
 c  ⇐ •Import "deps/color.bqn"
 s  ⇐ •Import "deps/string.bqn"
 fs ⇐ •Import "deps/file_system.bqn"
+fn ⇐ •Import "deps/fun.bqn"
+
+AlignAssignments ← {
+    n ← ⌈´{+´∨`⌾⌽' '≠⊑"←"s.Split𝕩}¨𝕩
+    {" ← " s.Join s.Trim¨⌾(1⊸↓) n⊸↑⌾⊑"←"s.Split𝕩}¨𝕩
+}
+
+Va ← {∧´𝕩∊"⟨⟩_, "∾∾"0Aa"+⟜↕¨10‿26‿26}                       # varaible or array
+Aa ← {({⊑Va¨(1↑"←"⊸s.Split)𝕩}∧(=´·+´˘"{}"=⌜⊢)∧(∨´"←"∊˜⊢))𝕩} # assignment alignable
 
 FormatSingleFile ← {
     l ← •file.Lines 𝕩
-    𝕩 •file.Lines {(¬·∧`⌾⌽' '⊸=)⊸/𝕩}¨l
+    l ↩ {(¬·∧`⌾⌽' '⊸=)⊸/𝕩}¨l     # remove trailing whitespace
+    g ← {0∾+`fn.Differ Aa¨𝕩}⊸⊔ l # align assignment symbols # TODO see if we can remove differ
+    l ↩ ∾{ Aa⊑𝕩 ? AlignAssignments 𝕩 ⋄ ; 𝕩 }¨g
+    𝕩 •file.Lines l
 }
 
 main ← {
     (c.Red "Must provide directory") ! 0≠≠•args
-    d ← { "."≡0⊑•args ? •wdpath ; 0⊑•args } # directory
-    FormatSingleFile¨ fs.ListRecursiveBQNFiles d
+    d ← { "."≡0⊑•args ? •wdpath ; •wdpath∾"/"∾0⊑•args } # directory or file
+    { 'f'≡•file.Type d ? FormatSingleFile d 
+                       ; FormatSingleFile¨ fs.ListRecursiveBQNFiles d }
     •Out "All files formatted! 🥳"
 }
