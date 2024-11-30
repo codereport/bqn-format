@@ -5,19 +5,22 @@ s  ⇐ •Import "deps/string.bqn"
 fs ⇐ •Import "deps/file_system.bqn"
 fn ⇐ •Import "deps/fun.bqn"
 
-AlignAssignments ← {
-    n ← ⌈´{+´∨`⌾⌽' '≠⊑"←"s.Split𝕩}¨𝕩
-    {" ← " s.Join s.Trim¨⌾(1⊸↓) n⊸↑⌾⊑"←"s.Split𝕩}¨𝕩
+Align ← { w𝕊𝕩:
+    n ← ⌈´{+´∨`⌾⌽' '≠⊑w s.Split𝕩}¨𝕩
+    {(' '∾w∾' ')s.Join s.Trim¨⌾(1⊸↓) n⊸↑⌾⊑w s.Split𝕩}¨𝕩
 }
 
 Va ← {∧´𝕩∊"⟨⟩_, "∾∾"0Aa"+⟜↕¨10‿26‿26}                       # varaible or array
 Aa ← {({⊑Va¨(1↑"←"⊸s.Split)𝕩}∧(=´·+´˘"{}"=⌜⊢)∧(∨´"←"∊˜⊢))𝕩} # assignment alignable
+Ca ← {(∨´'#'=𝕩)∧∨´' '≠(∧`'#'⊸≠)⊸/𝕩}                         # comment alignable
 
 FormatSingleFile ← {
     l ← •file.Lines 𝕩
-    l ↩ {(¬·∧`⌾⌽' '⊸=)⊸/𝕩}¨l                   # remove trailing whitespace
-    g ← Aa fn._ChunkKey⊸⊔ l                    # create chunks for aligning ←
-    l ↩ ∾{ Aa⊑𝕩 ? AlignAssignments 𝕩 ⋄ ; 𝕩 }¨g # align ← symbols
+    l ↩ {(¬·∧`⌾⌽' '⊸=)⊸/𝕩}¨l            # remove trailing whitespace
+    g ← Aa fn._ChunkKey⊸⊔ l             # create chunks for aligning ←
+    l ↩ ∾{ Aa⊑𝕩 ? "←" Align 𝕩 ⋄ ; 𝕩 }¨g # align ← symbols
+    g ↩ Ca fn._ChunkKey⊸⊔ l             # create chunks for aligning #
+    l ↩ ∾{ Ca⊑𝕩 ? "#" Align 𝕩 ⋄ ; 𝕩 }¨g # align # symbols
     𝕩 •file.Lines l
 }
 
