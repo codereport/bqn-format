@@ -18,6 +18,7 @@ FunctionWithALongerName ← {
     BB ← 2   # comment
     CCC ← 3 # comment
     DDDD  ← 4 # comment
+    "do something extra"∾t←"other stuff"
 }
 
 A ← { 𝕩 }
