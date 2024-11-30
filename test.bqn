@@ -13,6 +13,7 @@ BBxx ← 2   # comment
 CCCxx ← 3 # comment
 DDDDDDxx   ←4 + t ← 10 # comment
 
+# Standalone comment
 FunctionWithALongerName ← {
     A ← 1 # comment
     BB ← 2   # comment
