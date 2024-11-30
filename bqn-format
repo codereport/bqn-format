@@ -1,0 +1,19 @@
+#!/usr/bin/env bqn
+
+c  ⇐ •Import "deps/color.bqn"
+s  ⇐ •Import "deps/string.bqn"
+fs ⇐ •Import "deps/file_system.bqn"
+
+FormatSingleFile ← {
+    l ← •file.Lines 𝕩
+    𝕩 •file.Lines {(¬·∧`⌾⌽' '⊸=)⊸/𝕩}¨l
+}
+
+main ← {
+    (c.Red "Must provide directory") ! 0≠≠•args
+    d ← { "."≡0⊑•args ? •wdpath ; 0⊑•args } # directory
+    FormatSingleFile¨ fs.ListRecursiveBQNFiles d
+    •Out "All files formatted! 🥳"
+}
+
+main
