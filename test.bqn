@@ -7,7 +7,7 @@ DDDD  ← 4 # comment
 
 BBx ← 2   # comment
 CCCx ← 3 # comment
-DDDDx  ← 4 # commen
+DDDDx  ← 4 # comment
 
 BBxx ← 2   # comment
 CCCxx ← 3 # comment
