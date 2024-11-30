@@ -26,7 +26,8 @@ FormatSingleFile ← {
 
 main ← {
     (c.Red "Must provide directory") ! 0≠≠•args
-    d ← { "."≡0⊑•args ? •wdpath ; •wdpath∾"/"∾0⊑•args } # directory or file
+    a ← 0⊑•args # 1st argument
+    d ← { "."≡a ? •wdpath ; ('/'⊸=·⊑a)◶⟨•wdpath∾"/"∾⊢,⊢⟩a } # directory or file
     { 'f'≡•file.Type d ? FormatSingleFile d 
                        ; FormatSingleFile¨ fs.ListRecursiveBQNFiles d }
     •Out "All files formatted! 🥳"
