@@ -5,30 +5,32 @@ s  ⇐ •Import "deps/string.bqn"
 fs ⇐ •Import "deps/file_system.bqn"
 fn ⇐ •Import "deps/fun.bqn"
 
-Align ← { w𝕊𝕩:
-    n ← ⌈´{+´∨`⌾⌽' '≠⊑w s.Split𝕩}¨𝕩
-    {(' '∾w∾' ')s.Join s.Trim¨⌾(1⊸↓) n⊸↑⌾⊑w s.Split𝕩}¨𝕩
-}
+Asm ← {¬(≠`⊸∨)"'"""∊˜𝕩} # anti string mask # TODO fix
+Va  ← {∧´𝕩∊"⟨⟩_, "∾∾"0Aa"+⟜↕¨10‿26‿26}                        # varaible or array
+Aa  ← (⊑·Va¨(1↑"←"⊸s.Split))∧(=´·+´˘"{}"=⌜⊢)∧(∨´(Asm∧"←"∊˜⊢)) # assignment alignable
+Ca  ← {(∨´(Asm∧'#'⊸=)𝕩)∧∨´' '≠(∧`(Asm∧'#'⊸≠))⊸/𝕩}             # comment alignable
 
-Va ← {∧´𝕩∊"⟨⟩_, "∾∾"0Aa"+⟜↕¨10‿26‿26}                       # varaible or array
-Aa ← {({⊑Va¨(1↑"←"⊸s.Split)𝕩}∧(=´·+´˘"{}"=⌜⊢)∧(∨´"←"∊˜⊢))𝕩} # assignment alignable
-Ca ← {(∨´'#'=𝕩)∧∨´' '≠(∧`'#'⊸≠)⊸/𝕩}                         # comment alignable
+Align ← { w𝕊𝕩:
+    Sma ← (Asm∧∊⟜w)⊸s.SplitMask  # split mask with asm
+    n   ← ⌈´(+´·∨`⌾⌽' '≠⊑∘Sma)¨𝕩 # length for alignment
+    {(' '∾w∾' ')s.Join s.Trim¨⌾(1⊸↓)n⊸↑⌾⊑Sma 𝕩}¨𝕩
+}
 
 FormatSingleFile ← {
     l ← •file.Lines 𝕩
     l ↩ {(¬·∧`⌾⌽' '⊸=)⊸/𝕩}¨l            # remove trailing whitespace
-    g ← Aa fn._ChunkKey⊸⊔ l             # create chunks for aligning ←
+    g ← Aa fn._ChunkKey⊸⊔ l             # create chunks for aligning
     l ↩ ∾{ Aa⊑𝕩 ? "←" Align 𝕩 ⋄ ; 𝕩 }¨g # align ← symbols
-    g ↩ Ca fn._ChunkKey⊸⊔ l             # create chunks for aligning #
+    g ↩ Ca fn._ChunkKey⊸⊔ l             # create chunks for aligning
     l ↩ ∾{ Ca⊑𝕩 ? "#" Align 𝕩 ⋄ ; 𝕩 }¨g # align # symbols
     𝕩 •file.Lines l
 }
 
 main ← {
     (c.Red "Must provide directory") ! 0≠≠•args
-    a ← 0⊑•args # 1st argument
+    a ← 0⊑•args                                             # 1st argument
     d ← { "."≡a ? •wdpath ; ('/'⊸=·⊑a)◶⟨•wdpath∾"/"∾⊢,⊢⟩a } # directory or file
-    { 'f'≡•file.Type d ? FormatSingleFile d 
+    { 'f'≡•file.Type d ? FormatSingleFile d
                        ; FormatSingleFile¨ fs.ListRecursiveBQNFiles d }
     •Out "All files formatted! 🥳"
 }
