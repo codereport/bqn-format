@@ -15,7 +15,7 @@
         <img src="https://img.shields.io/twitter/follow/code_report.svg?style=social&label=@code_report" /></a>
 </p>
 
-### 🚧🚧🚧 THIS IS A WIP. MANY CORNER CASES CURRENTLY DO NOT WORK.  🚧🚧🚧
+### 🚧 THIS IS A WIP. MANY CORNER CASES CURRENTLY DO NOT WORK.  🚧
 
 A (soon to be configurable) formatter for [BQN](https://mlochbaum.github.io/BQN).
 
