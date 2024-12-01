@@ -19,9 +19,9 @@ Align ← { w𝕊𝕩:
 FormatSingleFile ← {
     l ← •file.Lines 𝕩
     l ↩ {(¬·∧`⌾⌽' '⊸=)⊸/𝕩}¨l            # remove trailing whitespace
-    g ← Aa fn._ChunkKey⊸⊔ l             # create chunks for aligning
+    g ← Aa fn._ChunkKey l               # create chunks for aligning
     l ↩ ∾{ Aa⊑𝕩 ? "←" Align 𝕩 ⋄ ; 𝕩 }¨g # align ← symbols
-    g ↩ Ca fn._ChunkKey⊸⊔ l             # create chunks for aligning
+    g ↩ Ca fn._ChunkKey l               # create chunks for aligning
     l ↩ ∾{ Ca⊑𝕩 ? "#" Align 𝕩 ⋄ ; 𝕩 }¨g # align # symbols
     𝕩 •file.Lines l
 }
