@@ -6,7 +6,7 @@ fs ⇐ •Import "deps/file_system.bqn"
 fn ⇐ •Import "deps/fun.bqn"
 
 Asm ← {¬(≠`⊸∨)"'"""∊˜𝕩} # anti string mask # TODO fix
-Va  ← {∧´𝕩∊"⟨⟩_, "∾∾"0Aa"+⟜↕¨10‿26‿26}                        # varaible or array
+Va  ← {∧´𝕩∊"⟨⟩‿_, "∾∾"0Aa"+⟜↕¨10‿26‿26}                       # varaible or array
 Aa  ← (⊑·Va¨(1↑"←"⊸s.Split))∧(=´·+´˘"{}"=⌜⊢)∧(∨´(Asm∧"←"∊˜⊢)) # assignment alignable
 Ca  ← {(∨´(Asm∧'#'⊸=)𝕩)∧∨´' '≠(∧`(Asm∧'#'⊸≠))⊸/𝕩}             # comment alignable
 
